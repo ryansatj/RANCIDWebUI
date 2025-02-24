@@ -14,3 +14,12 @@
 | `/getconfigs`          | GET    | Fetch all router configurations   |
 | `/rlog/{logname}`      | GET    | Get details of a specific log     |
 | `/diff/{router_name}`  | POST   | Show `cvs diff` output, r1 and r2 is the request body, r1 specifies first revision parameter and r2 specifies second revision parameter            |
+| `/getrouter`           | GET    | Get all routers name              |
+| `/get/{router_name}`   | GET    | Get specific router configurations|
+| `/checklogs`           | GET    | Get all rancid-run logs           |
+| `/log/{logname}`       | GET    | Get details of a specific log     |
+
+## Copyright
+## License & Copyright
+© 2025 ryansatj. All rights reserved.  
+This project is licensed under the [MIT License](LICENSE).  
