@@ -19,7 +19,7 @@
 | `/checklogs`           | GET    | Get all rancid-run logs           |
 | `/log/{logname}`       | GET    | Get details of a specific log     |
 
-## Copyright
-## License & Copyright
+
+License & Copyright
 © 2025 ryansatj. All rights reserved.  
-This project is licensed under the [MIT License](LICENSE).  
+ 
