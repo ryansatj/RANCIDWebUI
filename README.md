@@ -1,4 +1,7 @@
 ﻿# RANCIDWebUI
+## Background
+Rancid Web UI is a Web based application, that can visualize RANCID CVS into a web. RANCID is a network management tool that primarily used to backup all cisco configurations, but now RANCID can be widely used in variety of devices like Mikrotik or Juniper. RANCID do not have its own web interface making it difficult to visualize the configuration. This Web UI is actively requesting using HTTP to the rancid server, while RANCID server should have executed the python http server code. With this Web UI RANCID Web UI can be easily visualized with some additional features like to differentiate the CVS in the RANCID.
+
 ## SET UP
 1. Make sure youre rancid is working properly with CVS
 2. Use group on your routers, edit your routers group in /etc/rancid/rancid.conf in this case the name of routers group is LIST_OF_GROUPS="newRouters"
