@@ -44,7 +44,7 @@ const LogDetailsPage = () => {
         <div className="p-4">
             <button
                 className="text-xl bg-slate-950 rounded-lg text-white px-4 py-2 m-2 hover:bg-gray-700"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/logs")}
             >Back</button>
             <h1 className="text-2xl font-bold mb-4">Config Detail: {logName}</h1>
             <pre className="whitespace-pre-wrap border border-gray-300 rounded-lg p-4 bg-gray-50">

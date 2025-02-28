@@ -13,21 +13,28 @@ const ConfigsPage = () => {
                 if (!response.ok) {
                     throw new Error("Failed to fetch configs");
                 }
-                return response.json();
+                return response.text(); // Get raw text response first
             })
-            .then((data) => {
-                if (data.status === "success" && data.response.data) {
-                    // Extract name & date from response
-                    const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)$/;
-
-                    const validConfigs = data.response.data.filter((config) =>
-                        ipv4Regex.test(config.name)
-                    );
-
-                    setConfigs(validConfigs);
-                } else {
-                    throw new Error("Invalid response format");
+            .then((rawText) => {
+                console.log("Raw Response:", rawText); // Debugging: log raw text
+    
+                try {
+                    const data = JSON.parse(rawText); // Parse JSON manually
+                    if (data.status === "success" && data.response.data) {
+                        const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)$/;
+                        
+                        const validConfigs = data.response.data.filter((config) =>
+                            ipv4Regex.test(config.name)
+                        );
+    
+                        setConfigs(validConfigs);
+                    } else {
+                        throw new Error("Invalid response format");
+                    }
+                } catch (jsonError) {
+                    throw new Error("Invalid JSON format: " + jsonError.message);
                 }
+    
                 setLoading(false);
             })
             .catch((err) => {
@@ -35,6 +42,7 @@ const ConfigsPage = () => {
                 setLoading(false);
             });
     }, []);
+    
 
     const handleConfigClick = (configName) => {
         navigate(`/config/${configName}`);
@@ -66,7 +74,7 @@ const ConfigsPage = () => {
                         className="p-3 border-b border-gray-200 last:border-none cursor-pointer hover:bg-gray-100 flex justify-between"
                         onClick={() => handleConfigClick(config.name)}
                     >
-                        <span className="font-semibold">{config.name}</span>
+                        <span className="font-semibold">{config.hostname} ({config.name})</span>
                         <span className="text-gray-500 text-sm">Last Backup on {config.date}</span>
                     </li>
                 ))}
