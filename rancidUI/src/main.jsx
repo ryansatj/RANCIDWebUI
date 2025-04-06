@@ -8,6 +8,7 @@ import LogsPage from './LogsPage.jsx';
 import LogDetailsPage from './LogDetailsPage.jsx';
 import RouterLogs from './RouterLogs.jsx';
 import RouterLogsDetails from './RouterLogsDetails.jsx';
+import ConfigsPage from './ConfigsPage.jsx';
 
 // Create a root element
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/rlogs/:logname",
     element: <RouterLogsDetails/>,
+  },
+  {
+    path: "/home",
+    element: <ConfigsPage/>,
   },
 ]);
 

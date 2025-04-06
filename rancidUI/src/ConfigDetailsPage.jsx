@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import useAuthRedirect from "./Auth/useAuthRedirect";
 
 
 const ConfigDetailPage = () => {
+    useAuthRedirect();
     const { configName } = useParams();
     const [configDetail, setConfigDetail] = useState("");
     const [loading, setLoading] = useState(true);
@@ -44,7 +46,7 @@ const ConfigDetailPage = () => {
         <div className="p-4">
              <button
                 className="text-xl bg-slate-950 rounded-lg text-white px-4 py-2 m-2 hover:bg-gray-700"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/home")}
             >Back</button>
             <h1 className="text-2xl font-bold mb-4">Config Detail: {configName}</h1>
             <pre className="whitespace-pre-wrap border border-gray-300 rounded-lg p-4 bg-gray-50">

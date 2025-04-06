@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuthRedirect from "./Auth/useAuthRedirect";
 
 const RouterLogs = () => {
+    useAuthRedirect();
     const [configs, setConfigs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -45,7 +47,7 @@ const RouterLogs = () => {
         <div className="p-4">
             <button
                 className="text-xl bg-slate-950 rounded-lg text-white px-4 py-2 hover:bg-gray-700"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/home")}
             >
                 Back
             </button>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import useAuthRedirect from "./Auth/useAuthRedirect";
 
 
 const LogDetailsPage = () => {
+    useAuthRedirect();
     const { logName } = useParams();
     const [configDetail, setConfigDetail] = useState("");
     const [loading, setLoading] = useState(true);

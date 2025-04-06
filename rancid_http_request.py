@@ -3,6 +3,7 @@ import os
 import json
 import subprocess
 import time
+import psycopg2
 from urllib.parse import urlparse, unquote
 
 class ConfigHandler(BaseHTTPRequestHandler):
@@ -100,6 +101,55 @@ class ConfigHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps(response).encode("utf-8"))
 
+
+        elif self.path == "/login":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                post_data = self.rfile.read(content_length)
+                request_body = json.loads(post_data)
+
+                username = request_body.get("username")
+                password = request_body.get("password")
+
+                if not username or not password:
+                    self.send_response(400)
+                    response = {"status": "error", "response": "Username and password are required"}
+                else:
+                    # 🔽 Koneksi ke PostgreSQL Lokal
+                    conn = psycopg2.connect(
+                        host="localhost",       # 🔹 Ganti dari Neon ke Local
+                        database="postgres",    # 🔹 Ganti ke database lokal
+                        user="postgres",        # 🔹 Gunakan user lokal
+                        password="postgre",# 🔹 Sesuaikan password lokal
+                        port=5432               # 🔹 Port default PostgreSQL
+                    )
+                    
+                    cur = conn.cursor()
+                    cur.execute("SELECT name, username FROM users WHERE username = %s AND password = %s", (username, password))
+                    user = cur.fetchone()
+                    cur.close()
+                    conn.close()
+
+                    if user:
+                        name, username = user  # Unpacking tuple
+                        self.send_response(200)
+                        response = {
+                            "status": "success",
+                            "response": "Login successful",
+                            "user": {"name": name, "username": username}
+                        }
+                    else:
+                        self.send_response(401)
+                        response = {"status": "error", "response": "Invalid credentials"}
+
+            except Exception as e:
+                self.send_response(500)
+                response = {"status": "error", "response": f"Internal Server Error: {str(e)}"}
+
+            self.send_header("Content-Type", "application/json")
+            self.add_cors_headers()
+            self.end_headers()
+            self.wfile.write(json.dumps(response).encode("utf-8"))
 
     def do_GET(self):
         if self.path == "/getconfigs":
@@ -254,12 +304,22 @@ class ConfigHandler(BaseHTTPRequestHandler):
 
                     response = {"status": "success", "response": log_details}
                     self.send_response(200)
-                    return
-                
+                    self.send_header("Content-Type", "application/json")
+                    self.add_cors_headers()
+                    self.end_headers()
+                    self.wfile.write(json.dumps(response).encode("utf-8"))
+
+                    return  # ✅ Ensure function exits
+
                 else:
                     response = {"status": "error", "response": "Logs directory not found"}
                     self.send_response(404)
-                    return
+                    self.send_header("Content-Type", "application/json")
+                    self.add_cors_headers()
+                    self.end_headers()
+                    self.wfile.write(json.dumps(response).encode("utf-8"))
+
+                    return  # ✅ Ensure function exits
 
             except Exception as e:
                 response = {"status": "error", "response": str(e)}
@@ -268,7 +328,9 @@ class ConfigHandler(BaseHTTPRequestHandler):
                 self.add_cors_headers()
                 self.end_headers()
                 self.wfile.write(json.dumps(response).encode("utf-8"))
-                return
+
+                return  # ✅ Ensure function exits
+
 
 
         elif self.path.startswith("/log/"):

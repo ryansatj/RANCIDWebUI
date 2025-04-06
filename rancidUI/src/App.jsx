@@ -1,7 +1,7 @@
-import ConfigsPage from "./ConfigsPage";
+import LoginPage from "./LoginPage";
 
 export default function App() {
   return (
-    <ConfigsPage/>
+    <LoginPage/>
   )
 }
